@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Free Solana ↔ Ethereum Bridge (Testnet)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body{font-family:Arial;text-align:center;margin-top:40px;background:#f8f9fa}
+    button{padding:12px 24px;font-size:18px;margin:10px;border-radius:8px;border:none;background:#007bff;color:#fff}
+    #status{margin-top:20px}
+  </style>
+</head>
+<body>
+  <h1>Solana ↔ Ethereum Bridge (Testnet)</h1>
+  <button onclick="connectWallets()">Connect Wallets</button>
+  <button onclick="swapDemo()">Swap Demo (Goerli ↔ Devnet)</button>
+  <div id="status">Status: idle</div>
+
+  <script>
+    let provider, signer, solanaWallet;
+    async function connectWallets(){
+      // Ethereum
+      if(window.ethereum){
+        await window.ethereum.request({method:"eth_requestAccounts"});
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+      }
+      // Solana
+      if(window.solana){
+        await window.solana.connect();
+        solanaWallet = window.solana;
+      }
+      document.getElementById("status").innerText = "Wallets connected";
+    }
+    async function swapDemo(){
+      document.getElementById("status").innerText = "Demo swap triggered (check console)";
+      console.log("Ethereum signer:", await signer.getAddress());
+      console.log("Solana wallet:", solanaWallet.publicKey.toString());
+    }
+  </script>
+</body>
+</html>
